@@ -1,33 +1,28 @@
-const BlogForm = ({ blogForm, onChangeInput, onAddBlog, onError }) => {
-	console.log('onError: ', onError);
+const BlogForm = ({ blogForm, onChangeInput, onAddBlog }) => {
 	return (
 		<form className='blog__form form'>
-			<input
-				type='text'
-				className={onError ? 'form__input form__input_error' : 'form__input'}
-				name='title'
-				value={blogForm.title}
-				placeholder='Заголовок'
-				onChange={onChangeInput}
-			/>
-			<textarea
-				type='text'
-				className={
-					onError
-						? 'form__input form__input_desc form__input_error'
-						: 'form__input form__input_desc'
-				}
-				name='body'
-				value={blogForm.body}
-				placeholder='Напиши пост'
-				onChange={onChangeInput}
-			/>
-			<button
-				className='form__add'
-				type='button'
-				onClick={onAddBlog}
-				disabled={onError}
-			>
+			<label className='form__label'>
+				<input
+					type='text'
+					className='form__input'
+					name='title'
+					placeholder='Заголовок'
+					value={blogForm.title}
+					onChange={onChangeInput}
+				/>
+			</label>
+			<label className='form__label'>
+				<textarea
+					type='text'
+					className='form__input form__input_desc'
+					name='body'
+					placeholder='Напиши пост'
+					value={blogForm.body}
+					onChange={onChangeInput}
+				/>
+			</label>
+
+			<button className='form__add' type='button' onClick={onAddBlog}>
 				Опубликовать
 			</button>
 		</form>

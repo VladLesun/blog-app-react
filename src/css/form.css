@@ -4,7 +4,12 @@
 	gap: 30px;
 }
 
+.form__label {
+	width: 100%;
+}
+
 .form__input {
+	width: 100%;
 	height: 60px;
 	padding: 10px 20px;
 	border: 1px solid var(--border-black);
@@ -22,6 +27,12 @@
 	resize: none;
 }
 
+.form__error {
+	margin-top: 5px;
+	font-size: 20px;
+	color: var(--color-error);
+}
+
 .form__add {
 	width: 100%;
 	height: 60px;
@@ -33,6 +44,12 @@
 
 	&:active {
 		transform: scale(0.9);
+	}
+
+	&:disabled {
+		background-color: rgba(0, 0, 0, 0.3);
+		color: black;
+		cursor: no-drop;
 	}
 }
 

@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react';
 import { addBlog, deleteBlog, getBlog } from './api/blog';
-import BlogForm from './components/BlogForm/BlogForm';
 import BlogItem from './components/BlogItem/BlogItem';
 import { getBlogTime } from './utils/get-blog-time';
 import { getNormalizeBlog } from './utils/get-normalize-blog';
-import { validation } from './utils/validation';
 
 //! API 'https://jsonplaceholder.typicode.com/posts'
 
 const App = () => {
+	//! app
 	const [blogsIds, setBlogsIds] = useState(null);
 	const [blogsById, setBlogsById] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
+
+	//! validation
 	const [blogForm, setBlogForm] = useState({
 		title: '',
 		body: '',
 	});
-	const [isLoading, setIsLoading] = useState(false);
-	const [isError, setIsError] = useState(false);
-	const [isInputError, setIsInputError] = useState(false);
+	const [blogFormValid, setBlogFormValid] = useState(false);
+	const [blogTitleDirty, setBlogTitleDirty] = useState(false);
+	const [blogBodyDirty, setBlogBodyDirty] = useState(false);
+	const [blogInputError, setBlogInputError] = useState({
+		title: 'Заголовок должен быть заполнен',
+		body: 'Пост должен быть заполнен',
+	});
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -38,6 +45,14 @@ const App = () => {
 			});
 	}, []);
 
+	useEffect(() => {
+		if (blogInputError.title || blogInputError.body) {
+			setBlogFormValid(false);
+		} else {
+			setBlogFormValid(true);
+		}
+	}, [blogInputError.title, blogInputError.body]);
+
 	const handleChangeInput = e => {
 		const { name, value } = e.target;
 
@@ -46,7 +61,56 @@ const App = () => {
 			[name]: value,
 		});
 
-		setIsInputError(validation(name, value));
+		if (name === 'title') {
+			if (value.length < 1 || value.length > 100) {
+				setBlogInputError({
+					...blogInputError,
+					[name]: 'Заголовок больше 100 символов',
+				});
+				if (!value.trim()) {
+					setBlogInputError({
+						...blogInputError,
+						[name]: 'Заголовок должен быть заполнен',
+					});
+				}
+			} else {
+				setBlogInputError({
+					...blogInputError,
+					[name]: '',
+				});
+			}
+		}
+
+		if (name === 'body') {
+			if (value.length < 1 || value.length > 200) {
+				setBlogInputError({
+					...blogInputError,
+					[name]: 'Пост больше 200 символов',
+				});
+				if (!value.trim()) {
+					setBlogInputError({
+						...blogInputError,
+						[name]: 'Пост должен быть заполнен',
+					});
+				}
+			} else {
+				setBlogInputError({
+					...blogInputError,
+					[name]: '',
+				});
+			}
+		}
+	};
+
+	const handleBlurInput = e => {
+		switch (e.target.name) {
+			case 'title':
+				setBlogTitleDirty(true);
+				break;
+			case 'body':
+				setBlogBodyDirty(true);
+				break;
+		}
 	};
 
 	const handleAddBlog = () => {
@@ -82,12 +146,45 @@ const App = () => {
 			<div className='container blog__container'>
 				<div className='blog__left'>
 					<p className='blog__form-title default-title'>Новый пост</p>
-					<BlogForm
-						blogForm={blogForm}
-						onChangeInput={e => handleChangeInput(e)}
-						onAddBlog={() => handleAddBlog()}
-						onError={isInputError}
-					/>
+					<form className='blog__form form'>
+						<label className='form__label'>
+							<input
+								type='text'
+								className='form__input'
+								name='title'
+								placeholder='Заголовок'
+								onBlur={e => handleBlurInput(e)}
+								value={blogForm.title}
+								onChange={e => handleChangeInput(e)}
+							/>
+							{blogTitleDirty && blogInputError.title && (
+								<div className='form__error'>{blogInputError.title}</div>
+							)}
+						</label>
+						<label className='form__label'>
+							<textarea
+								type='text'
+								className='form__input form__input_desc'
+								name='body'
+								placeholder='Напиши пост'
+								onBlur={e => handleBlurInput(e)}
+								value={blogForm.body}
+								onChange={e => handleChangeInput(e)}
+							/>
+							{blogBodyDirty && blogInputError.body && (
+								<div className='form__error'>{blogInputError.body}</div>
+							)}
+						</label>
+
+						<button
+							className='form__add'
+							type='button'
+							onClick={() => handleAddBlog()}
+							disabled={!blogFormValid}
+						>
+							Опубликовать
+						</button>
+					</form>
 				</div>
 
 				<div className='blog__right'>
