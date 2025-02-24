@@ -1,0 +1,70 @@
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+:root {
+	--color-black: #000;
+	--color-white: #fff;
+	--color-time: #0094ff;
+	--color-error: #f00;
+	--bg-black: #000;
+	--bg-white: #fff;
+	--border-black: rgba(0, 0, 0, 0.2);
+	--border-white: rgba(255, 255, 255, 0.8);
+	--btn-blue: #0094ff;
+}
+
+body {
+	font-family: 'Inter', sans-serif;
+	font-weight: 400;
+	font-size: 25px;
+	background-color: var(--bg-white);
+	color: var(--color-black);
+}
+
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+input,
+textarea {
+	border: none;
+	outline: none;
+	font-family: 'Inter', sans-serif;
+}
+
+button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-family: 'Inter', sans-serif;
+	cursor: pointer;
+}
+
+.container {
+	max-width: 1150px;
+	padding: 0 15px;
+	margin: 0 auto;
+}
+
+.default-title {
+	font-weight: 700;
+	font-size: 40px;
+	color: var(--color-black);
+}
